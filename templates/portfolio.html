@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .portfolio-container {
+            background-color: #1c1c1c;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .project-card {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .project-link {
+            color: #f0a500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">My Portfolio</h2>
+
+        <div class="portfolio-container">
+            <!-- Display existing projects -->
+            <div class="row">
+                {% for project in projects %}
+                    <div class="col-md-6">
+                        <div class="card project-card">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" class="project-image" alt="{{ project.title }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ project.title }}</h5>
+                                <p class="card-text"><strong>Category:</strong> {{ project.category }}</p>
+                                <p class="card-text">{{ project.description }}</p>
+                                {% if project.project_link %}
+                                    <a href="{{ project.project_link }}" class="project-link" target="_blank">View Project</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No projects added yet. Add a new project below!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Form to add a new project -->
+        <h4>Add New Project</h4>
+        <form method="post" action="{% url 'portfolio' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Project</button>
+        </form>
+        <a  href="{% url 'index' user.id %}" class="btn btn-primary btn-block">submit</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</body>
+{% endblock %}

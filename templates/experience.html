@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .container {
+
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333; /* Text color for readability */
+    }
+
+    /* Optional: Adjust card backgrounds for better readability */
+    .card {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+</style>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Work Experience</h2>
+
+        <!-- Display existing experience entries -->
+        <div id="experience-list">
+            {% for experience in experiences %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ experience.worked_field }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ experience.year }}</h6>
+                        <p class="card-text">{{ experience.description }}</p>
+                         <a href="{% url 'edit_experience' experience.id %}" class="btn btn-secondary">Edit</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No experience entries yet. Add your first entry below!</p>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- Form to add a new experience entry -->
+        <h4>Add New Experience</h4>
+        <form id="experience-form" method="post" action="{% url 'experience' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Experience</button>
+        </form>
+
+        <!-- Button to add a new empty experience form -->
+        <a href="{% url 'skills' %}" id="add-experience-btn" class="btn btn-secondary mt-3">next</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+{% endblock %}

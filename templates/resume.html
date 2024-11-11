@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .container {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333; /* Text color for readability */
+    }
+
+    /* Optional: Adjust card backgrounds for better readability */
+    .card {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+</style>
+
+    <div class="container mt-5 shadow" >
+        <h2 class="text-center mb-4">Resume - Education</h2>
+
+        <!-- Display existing education entries -->
+        <div id="education-list">
+            {% for education in educations %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">College  :{{ education.college }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">year  :{{ education.year }}</h6>
+                        <p class="card-text">Description :{{ education.description }}</p>
+                        <a href="{% url 'edit_resume' education.id %}" class="btn btn-secondary">Edit</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No education entries yet. Add your first entry below!</p>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- Form to add new education entry -->
+        <h4>Add New Education</h4>
+        <form id="education-form" method="post" action="{% url 'resume' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Education</button>
+        </form>
+
+        <!-- Button to add a new empty education form -->
+        <a href="{% url 'experience' %}" id="add-education-btn" class="btn btn-secondary mt-3" >Next</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+{% endblock %}
